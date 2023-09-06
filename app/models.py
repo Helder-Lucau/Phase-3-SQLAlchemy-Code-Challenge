@@ -67,9 +67,17 @@ class Customer(Base):
     
     # creates a new review for the restaurant with the given restaurant id
     def add_review(self, restaurant, rating):
-        review = Review(Customer_id=self.id, restaurant_id=restaurant.id, rating=rating)
-        session.add(review)
+        new_review = Review(
+            customer_id = self.id, 
+            restaurant_id = restaurant.id, 
+            rating = rating
+            )
+        session.add(new_review)
         session.commit()
+
+    # delete reviews
+    def delete_reviews(self, restaurant):
+        session.query(Review).filter_by(restaurant_id = restaurant.id, customer_id = self.id).delete()
 
 class Review(Base):
     __tablename__ = 'reviews'
