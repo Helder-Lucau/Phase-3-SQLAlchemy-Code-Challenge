@@ -14,9 +14,9 @@ if __name__ == '__main__':
     session = session()
 
 # Clear our database before each new seed 
-    session.query(Restaurant).delete()
-    session.query(Customer).delete()
-    session.query(Review).delete()
+    # session.query(Restaurant).delete()
+    # session.query(Customer).delete()
+    # session.query(Review).delete()
 
     customer_list=[]
     for i in range(20):
@@ -41,6 +41,7 @@ if __name__ == '__main__':
     review_list=[]
     for customer in customer_list:
         for i in range(random.randint(1, 4)):
+            restaurant = random.choice(restaurant_list)
             review = Review(
                 star_rating = random.randint(0, 3),
                 restaurant_id = restaurant.id,
@@ -49,5 +50,10 @@ if __name__ == '__main__':
             session.add(review)
             session.commit()
             review_list.append(review)  
+    
+    # Test Examples
+    for i in range(2):
+        print("Customers Reviews:", customer_list[i].customer_reviews())
+        print("Customers Full name", customer_list[i].full_name())
 
 session.close()

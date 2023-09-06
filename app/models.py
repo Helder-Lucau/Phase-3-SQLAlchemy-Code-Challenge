@@ -55,7 +55,7 @@ class Customer(Base):
 
     # return a collection of all the reviews that customer has left
     def customer_reviews(self):
-        return [reviews for reviews in session.query(Review).filter(Review.id == self.id)]
+        return [review for review in session.query(Review).filter(Review.id == self.id)]
 
     # return a collection of all the restaurants that the customer has reviewed
     def customer_reviewed(self):
@@ -88,9 +88,10 @@ class Review(Base):
     customer_id = Column(Integer(), ForeignKey('customers.id'))
 
     def __repr__(self):
-        return f"Student {self.id}: " \
-            + f"firstName{self.star_rating}, " \
-            + f"lastName {self.last_name}"
+        return f"{self.id}: " \
+            + f"{self.star_rating}, " \
+            + f"{self.restaurant_id}, " \
+            + f"{self.customer_id}"
 
     # create relationship
     restaurant_rv = relationship('Restaurant', back_populates='reviews')
