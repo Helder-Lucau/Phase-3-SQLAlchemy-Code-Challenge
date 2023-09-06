@@ -32,11 +32,11 @@ class Restaurant(Base):
     
     # returns a collection of all the customers who reviewed the Restaurant
     def restaurant_customers(self):
-        return self.customers
+        return self.customer
     
     # returns one restaurant instance for the restaurant that has the highest price
     def fanciest(self):
-        return session.query(Restaurant).order_by(Restaurant.price.desc()).first()
+        return session.query(Restaurant).order_by(self.price.desc()).first()
 
     # returns a list of strings with all the reviews for this restaurant 
     # def  all_reviews(self):
@@ -50,9 +50,9 @@ class Customer(Base):
     last_name = Column(String())
 
     def __repr__(self):
-        return f"Student {self.id}: " \
-            + f"firstName{self.first_name}, " \
-            + f"lastName {self.last_name}"
+        return f"Customer={self.id}: " \
+            + f"first_name={self.first_name}, " \
+            + f"last_name={self.last_name}"
 
     # creating relationship
     reviews = relationship('Review', back_populates='customer_rv')
@@ -64,7 +64,7 @@ class Customer(Base):
 
     # return a collection of all the restaurants that the customer has reviewed
     def customer_restaurants(self):
-        return self.restaurants
+        return self.restaurant
 
     # return the full name of the customer
     def full_name(self):
@@ -97,10 +97,10 @@ class Review(Base):
     customer_id = Column(Integer(), ForeignKey('customers.id'))
 
     def __repr__(self):
-        return f"{self.id}: " \
-            + f"{self.star_rating}, " \
-            + f"{self.restaurant_id}, " \
-            + f"{self.customer_id}"
+        return f"review{self.id}: " \
+            + f"star rating = {self.star_rating}, " \
+            + f"restaurant_id = {self.restaurant_id}, " \
+            + f"customer_id = {self.customer_id}"
 
     # create relationship
     restaurant_rv = relationship('Restaurant', back_populates='reviews')
@@ -115,4 +115,4 @@ class Review(Base):
         return session.query(Customer).filter(Customer.id == self.customer_id).first()
     
     def full_review(self):
-        return f'Review for {self.restaurant_review()} by {self.customer.full_name()}: {self.star_rating} stars.'
+        return f'Review for {self.restaurant_review()} by {self.customer_review().full_name()}: {self.star_rating} stars.'

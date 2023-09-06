@@ -53,10 +53,13 @@ if __name__ == '__main__':
     
     # Test Examples
     for i in range(2):
-        print("Fanciest restaurant:",restaurant_list[i].fanciest())
-        print("Customer full name", customer_list[i].full_name())
-        print("Customer favourite restaurant:", customer_list[i].favorite_restaurant())
-        print("Customer Reviews:", customer_list[i].customer_reviews())
-        print("Customer reviewed restaurants:", customer_list[i].customer_reviews())
-        print("Highest star rating restaurant:",customer_list[i].favorite_restaurant())
+        # print("Fanciest restaurant:",restaurant_list[i].fanciest())
+        # print("Customer Full Name:", customer_list[i].full_name())
+        # print("Customer favourite restaurant:", customer_list[i].favorite_restaurant())
+        # print("Customer Reviews:", customer_list[i].customer_reviews())
+        # print("Customer reviewed restaurants:", customer_list[i].customer_reviews())
+        # print("Highest star rating restaurant:",customer_list[i].favorite_restaurant())
+        # print("List of customers who reviewed:", restaurant_list[i].restaurant_customers())
+        print("Full review:", review_list[i].full_review())
+
 session.close()
