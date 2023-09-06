@@ -28,7 +28,7 @@ class Restaurant(Base):
     reviews = relationship('Review', back_populates='restaurant_rv')
 
     # return a collection of all the reviews for the Restaurant
-    def restaurant_reviews(self):
+    def restaurant_customers(self):
         return [review for review in session.query(Review).filter.restaurant_id == self.id]
 
     # returns a collection of all the customers who reviewed the Restaurant
@@ -64,7 +64,12 @@ class Customer(Base):
     # return the full name of the customer
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
-
+    
+    # creates a new review for the restaurant with the given restaurant id
+    def add_review(self, restaurant, rating):
+        review = Review(Customer_id=self.id, restaurant_id=restaurant.id, rating=rating)
+        session.add(review)
+        session.commit()
 
 class Review(Base):
     __tablename__ = 'reviews'
