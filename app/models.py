@@ -103,3 +103,6 @@ class Review(Base):
     # return the restaurant instance for this review
     def review_restaurant(self):
         return session.query(Customer).filter(Customer.id == self.customer_id).first()
+    
+    def full_review(self):
+        return f'Review for {self.review_restaurant()} by {self.customer.full_name()}: {self.star_rating} stars.'
