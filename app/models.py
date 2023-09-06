@@ -23,19 +23,25 @@ class Restaurant(Base):
             + f"Price {self.price}"
 
     # Creating a relationship
-    customer = association_proxy(
-        'reviews', 'customer_rv', creator=lambda cs: Review(customer=cs))
+    customer = association_proxy('reviews', 'customer_rv', creator=lambda cs: Review(customer=cs))
     reviews = relationship('Review', back_populates='restaurant_rv')
 
     # return a collection of all the reviews for the Restaurant
-    def restaurant_customers(self):
+    def restaurant_reviews(self):
         return [review for review in session.query(Review).filter.restaurant_id == self.id]
-
+    
     # returns a collection of all the customers who reviewed the Restaurant
-    def customers_reviews(self):
+    def restaurant_customers(self):
         return self.customers
+    
+    # returns one restaurant instance for the restaurant that has the highest price
+    def fanciest(self):
+        return session.query(Restaurant).order_by(Restaurant.price.desc()).first()
 
-
+    # returns a list of strings with all the reviews for this restaurant 
+    # def  all_reviews(self):
+    #     return [f'Review for {self.name} by {self.customer.full_name()}: {review.star_rating} stars.' for review in self.reviews]
+    
 class Customer(Base):
     __tablename__ = 'customers'
 
@@ -50,27 +56,30 @@ class Customer(Base):
 
     # creating relationship
     reviews = relationship('Review', back_populates='customer_rv')
-    restaurant = association_proxy(
-        'reviews', 'restaurant_rv', creator=lambda rs: Review(restaurant=rs))
+    restaurant = association_proxy('reviews', 'restaurant_rv', creator=lambda rs: Review(restaurant=rs))
 
     # return a collection of all the reviews that customer has left
     def customer_reviews(self):
         return [review for review in session.query(Review).filter(Review.id == self.id)]
 
     # return a collection of all the restaurants that the customer has reviewed
-    def customer_reviewed(self):
+    def customer_restaurants(self):
         return self.restaurants
 
     # return the full name of the customer
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
     
+    # returns the restaurant instance that has the highest star rating from this customer
+    def favorite_restaurant(self):
+        return [session.query(Restaurant).filter(Restaurant.id == restaurant_id[0]).first() for restaurant_id in session.query(Review.restaurant_id).filter(Review.customer_id == self.id).order_by(Review.star_rating.desc()).limit(1)]
+    
     # creates a new review for the restaurant with the given restaurant id
     def add_review(self, restaurant, rating):
         new_review = Review(
             customer_id = self.id, 
             restaurant_id = restaurant.id, 
-            rating = rating
+            star_rating = rating
             )
         session.add(new_review)
         session.commit()
@@ -98,12 +107,12 @@ class Review(Base):
     customer_rv = relationship('Customer', back_populates='reviews')
 
     # should return a collection of all the reviews that the customer has left
-    def review_customer(self):
+    def customer_review(self):
         return session.query(Customer).filter(Customer.id == self.customer_id).first()
 
     # return the restaurant instance for this review
-    def review_restaurant(self):
+    def restaurant_review(self):
         return session.query(Customer).filter(Customer.id == self.customer_id).first()
     
     def full_review(self):
-        return f'Review for {self.review_restaurant()} by {self.customer.full_name()}: {self.star_rating} stars.'
+        return f'Review for {self.restaurant_review()} by {self.customer.full_name()}: {self.star_rating} stars.'

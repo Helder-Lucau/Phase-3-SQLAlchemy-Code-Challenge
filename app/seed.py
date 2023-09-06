@@ -40,10 +40,10 @@ if __name__ == '__main__':
 
     review_list=[]
     for customer in customer_list:
-        for i in range(random.randint(1, 4)):
+        for i in range(random.randint(1, 3)):
             restaurant = random.choice(restaurant_list)
             review = Review(
-                star_rating = random.randint(0, 3),
+                star_rating = random.randint(1, 3),
                 restaurant_id = restaurant.id,
                 customer_id = customer.id
             )
@@ -53,7 +53,10 @@ if __name__ == '__main__':
     
     # Test Examples
     for i in range(2):
-        print("Customers Reviews:", customer_list[i].customer_reviews())
-        print("Customers Full name", customer_list[i].full_name())
-
+        print("Fanciest restaurant:",restaurant_list[i].fanciest())
+        print("Customer full name", customer_list[i].full_name())
+        print("Customer favourite restaurant:", customer_list[i].favorite_restaurant())
+        print("Customer Reviews:", customer_list[i].customer_reviews())
+        print("Customer reviewed restaurants:", customer_list[i].customer_reviews())
+        print("Highest star rating restaurant:",customer_list[i].favorite_restaurant())
 session.close()
