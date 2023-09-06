@@ -1,29 +1,41 @@
-from sqlalchemy import (create_engine, Column, Integer, String, ForeignKey)
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.associationproxy import association_proxy
 
 engine = create_engine('sqlite:///restaurant.db')
 
 Base = declarative_base()
+session = sessionmaker(bind=engine)
+session = session()
+
 
 class Restaurant(Base):
     __tablename__ = 'restaurants'
-  
+
     id = Column(Integer(), primary_key=True)
-    name = Column(String())
+    name = Column(String(), index=True)
     price = Column(Integer())
 
     def __repr__(self):
-        return f"Student {self.id}: " \
+        return f"Restaurant {self.id}: " \
             + f"{self.name}, " \
             + f"Price {self.price}"
-    
+
     # Creating a relationship
-    customer = association_proxy('reviews', 'customer_rv', 
-        creator=lambda cs: Review(customer=cs))
+    customer = association_proxy(
+        'reviews', 'customer_rv', creator=lambda cs: Review(customer=cs))
     reviews = relationship('Review', back_populates='restaurant_rv')
-    
+
+    # return a collection of all the reviews for the Restaurant
+    def restaurant_reviews(self):
+        return [review for review in session.query(Review).filter.restaurant_id == self.id]
+
+    # returns a collection of all the customers who reviewed the Restaurant
+    def customers_reviews(self):
+        return self.customers
+
+
 class Customer(Base):
     __tablename__ = 'customers'
 
@@ -34,12 +46,25 @@ class Customer(Base):
     def __repr__(self):
         return f"Student {self.id}: " \
             + f"firstName{self.first_name}, " \
-            + f"lastName {self.last_name}"  
-    
-    # Create relationship 
-    review = relationship('Review', back_populates='review')
-    restaurant = association_proxy('review', 'restaurant_rv',
-            creator=lambda rs: Review(restaurant=rs))
+            + f"lastName {self.last_name}"
+
+    # creating relationship
+    reviews = relationship('Review', back_populates='customer_rv')
+    restaurant = association_proxy(
+        'reviews', 'restaurant_rv', creator=lambda rs: Review(restaurant=rs))
+
+    # return a collection of all the reviews that customer has left
+    def customer_reviews(self):
+        return [reviews for reviews in session.query(Review).filter(Review.id == self.id)]
+
+    # return a collection of all the restaurants that the customer has reviewed
+    def customer_reviewed(self):
+        return self.restaurants
+
+    # return the full name of the customer
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
 
 class Review(Base):
     __tablename__ = 'reviews'
@@ -52,8 +77,16 @@ class Review(Base):
     def __repr__(self):
         return f"Student {self.id}: " \
             + f"firstName{self.star_rating}, " \
-            + f"lastName {self.last_name}"  
-    
+            + f"lastName {self.last_name}"
+
     # create relationship
     restaurant_rv = relationship('Restaurant', back_populates='reviews')
     customer_rv = relationship('Customer', back_populates='reviews')
+
+    # should return a collection of all the reviews that the customer has left
+    def review_customer(self):
+        return session.query(Customer).filter(Customer.id == self.customer_id).first()
+
+    # return the restaurant instance for this review
+    def review_restaurant(self):
+        return session.query(Customer).filter(Customer.id == self.customer_id).first()

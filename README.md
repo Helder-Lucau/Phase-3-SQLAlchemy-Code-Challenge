@@ -1,69 +1,12 @@
-# Phase 3 Code Challenge: Restaurants
+# Phase 3 SQLAlchemy Code Challenge: Restaurants
+
 For this assignment, we'll be working with a restaurant review domain.
 
 We have three models: `Restaurant`, `Review`, and `Customer`.
-
  
-
-For our purposes, a `Restaurant` has many `Review`s, a `Customer` has many
-
-`Review`s, and a `Review` belongs to a `Restaurant` and to a `Customer`.
-
-`Restaurant` - `Customer` is a many to many relationship.
-
- 
-
-**Note**: You should draw your domain on paper or on a whiteboard _before you
-
-start coding_. Remember to identify a single source of truth for your data.
-
- 
-
-## Topics
- 
-
-- SQLAlchemy Migrations
-
-- SQLAlchemy Relationships
-
-- Class and Instance Methods
-
-- SQLAlchemy Querying
-
- 
-
-***
-
- 
-
-## Instructions
-Build out all of the methods listed in the deliverables.
-
-The methods are listed in a suggested order, but you can feel free to tackle the ones you think are easiest. Be careful: some of the later methods rely on earlier ones.
-
-**Remember!** This code challenge does not have tests. You cannot run `pytest`.
-
-You'll need to create your own sample instances so that you can try out your code on your own. Make sure your relationships and methods work in the console before submitting.
-
-You are also encouraged to use the `seeds.py` file to create sample data to test your models and relationships.
-
-Writing error-free code is more important than completing all of the deliverables listed - prioritize writing methods that work over writing more methods that don't work. You should test your code in the console as you write.
-
-Similarly, messy code that works is better than clean code that doesn't. First, prioritize getting things working. Then, if there is time at the end, refactor your code to adhere to best practices. 
-
-**Before you submit!** Save and run your code to verify that it works as you expect. If you have any methods that are not working yet, feel free to leave comments describing your progress.
-
-Deliverables
-Write the following methods in the classes. Feel free to build out any helper methods if needed.
-
-Remember: SQLAlchemy give your classes access to a lot of methods already! Keep in mind what methods SQLAlchemy gives you access to on each of your
-
-classes when you're approaching the deliverables below.
-
 ## Migrations
-Before working on the rest of the deliverables, you will need to create a migration for all tables.
 
- 
+Before working on the rest of the deliverables, you will need to create a migration for all tables.
 
 - A `Review` belongs to a `Restaurant`, and a `Review` also belongs to a  `Customer`.  In your migration, create any columns your `reviews` table will
 
@@ -71,13 +14,7 @@ Before working on the rest of the deliverables, you will need to create a migrat
 
 The `reviews` table should also have:  - A `star_rating` column that stores an integer.
  
-
 After creating the `reviews` table using a migration, use the `seeds.py` file to create instances of all your classes so you can test your code.
-
- 
-
-**Once you've set up your tables**, work on building out the following deliverables.
-
  
 
 # Object Relationship Methods
@@ -119,15 +56,7 @@ Use SQLAlchemy query methods where appropriate.
 
 - `Customer restaurants()`
 
- - should return a collection of all the restaurants that the `Customer` has
-
-   reviewed
-
- 
-
-Check that these methods work before proceeding. For example, you should be able to call `session.query(Customer).first().restaurants` and see a list
-
-of the restaurants for the first customer in the database based on your seed data; and `session.query(Review).first().customer` should return the customer for the first review in the database.
+ - should return a collection of all the restaurants that the `Customer` has reviewed
 
  
 
@@ -172,21 +101,47 @@ Review for {insert restaurant name} by {insert customer's full name}: {insert re
 
 - `Restaurant fanciest(), this method should be a class method`
 
- - returns _one_ restaurant instance for the restaurant that has the highest   price
+ - returns _one_ restaurant instance for the restaurant that has the highest price
 
 - `Restaurant all_reviews()`
 
- - should return an list of strings with all the reviews for this restaurant
+ - should return an list of strings with all the reviews for this restaurant formatted as follows:
 
-   formatted as follows:
 
-[
+## Project Setup 
 
- "Review for {insert restaurant name} by {insert customer's full name}: {insert review star_rating} stars.",
+### Clone the repository
 
- "Review for {insert restaurant name} by {insert customer's full name}: {insert review star_rating} stars.",
+```python
+https://github.com/Helder-Lucau/Phase-3-SQLAlchemy-Code-Challenge
+```
 
-]
+### Navigate to the cloned repository using the command: 
+
+```python
+cd folder_name
+```
+
+### Run on terminal
+
+
+## Author
+* This project code files is authored by [Helder Lucau](https://github.com/Helder-Lucau).
+
+## License
+
+Copyright (c) 2023 [Helder Lucau](https://github.com/Helder-Lucau).
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files , to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 
  
 
